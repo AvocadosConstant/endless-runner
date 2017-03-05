@@ -43,6 +43,7 @@ public class Game {
 
     public void onTouchEvent(MotionEvent event) {
         if (state == GameState.RUNNING) {
+            player.jump();
         } else {
             state = GameState.RUNNING;
         }

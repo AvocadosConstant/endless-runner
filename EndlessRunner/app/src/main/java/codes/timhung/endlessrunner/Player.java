@@ -32,6 +32,11 @@ public class Player extends Sprite {
         this.ax = this.ay = 0;
     }
 
+    public void jump() {
+        Log.d("PLAYER", "Jump");
+        if(Math.abs(this.getBottom() - screen.bottom) < 5) this.applyForce(0, -50);
+    }
+
     public void applyForce(double fax, double fay) {
         this.ax = fax;
         this.ay = fay;
