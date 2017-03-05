@@ -26,11 +26,19 @@ public class Game {
     private Resources resources;
     private GameState state = GameState.PAUSED;
 
+    private Player player;
+
     public Game(Context context, Rect screen, SurfaceHolder holder, Resources resources) {
         this.context = context;
         this.screen = screen;
         this.holder = holder;
         this.resources = resources;
+        player = new Player( null, new Rect(
+                screen.width()/2,
+                screen.height()/2,
+                screen.width()/2 + 120,
+                screen.height()/2 + 220),
+                screen);
     }
 
     public void onTouchEvent(MotionEvent event) {
@@ -48,6 +56,7 @@ public class Game {
     public void update(Long elapsed) {
         if(state == GameState.RUNNING){
             // Do stuff
+            player.update(elapsed);
         }
     }
 
@@ -83,5 +92,6 @@ public class Game {
         borderPaint.setColor(Color.GREEN);
         borderPaint.setStyle(Paint.Style.STROKE);
         canvas.drawRect(screen, borderPaint);
+        player.draw(canvas, 0);
     }
 }

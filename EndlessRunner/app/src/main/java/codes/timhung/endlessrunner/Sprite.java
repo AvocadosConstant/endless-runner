@@ -61,6 +61,7 @@ public class Sprite {
         vy += ay;
 
         // Update positions
+        if(this.affectedByGrav) vy += GRAV;
         setX(this.getX() + vx);
         setY(this.getY() + vy);
     }
