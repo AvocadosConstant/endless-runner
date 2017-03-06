@@ -43,39 +43,14 @@ public class Game {
         this.screen = screen;
         this.holder = holder;
         this.resources = resources;
-        player = new Player(null, context, new Rect(
-                400,
-                screen.height()/2,
-                520,
-                screen.height()/2 + 220),
-                screen);
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
-
-        highway = new ScrollableBackground( BitmapFactory.decodeResource(context.getResources(), R.drawable.highway, options),
-                context, new Rect( 0, screen.height() - screen.width() / 10, screen.width(), screen.height()), screen, 12);
-
-        skyline_close = new ScrollableBackground(BitmapFactory.decodeResource(context.getResources(), R.drawable.skyline_close, options),
-                context, new Rect( 0, screen.height() / 2, screen.height() * 3, screen.height()), screen, 8);
-
-        skyline_mid = new ScrollableBackground(BitmapFactory.decodeResource(context.getResources(), R.drawable.skyline_mid, options),
-                context, new Rect( 0, screen.height() / 4, screen.height() * 3, screen.height()), screen, 4);
-
-        skyline_far = new ScrollableBackground(BitmapFactory.decodeResource(context.getResources(), R.drawable.skyline_far, options),
-                context, new Rect( 0, screen.height() / 4, screen.height() * 3, screen.height()), screen, 2);
-
-        testCar = new Vehicle(null, context, Vehicle.generate(screen), screen, screen.height() - screen.width() / 10);
-
-        borderPaint.setStrokeWidth(24);
-        borderPaint.setColor(Color.GREEN);
-        borderPaint.setStyle(Paint.Style.STROKE);
+        restartGame();
     }
 
     public void onTouchEvent(MotionEvent event) {
         if (state == GameState.RUNNING) {
             player.jump();
-        } else {
-            state = GameState.RUNNING;
+        } if(state == GameState.PAUSED){
+            restartGame();
         }
     }
 
@@ -95,6 +70,8 @@ public class Game {
             testCar.update(elapsed);
 
             if(testCar.isOffScreen()) testCar = new Vehicle(null, context, Vehicle.generate(screen), screen, screen.height() - screen.width() / 10);
+
+            if(Rect.intersects(testCar.getHitbox(), player.getHitbox())) state = GameState.PAUSED;
         }
     }
 
@@ -109,6 +86,7 @@ public class Game {
             canvas.drawColor(Color.WHITE);
             switch (state) {
                 case PAUSED:
+                    drawGame(canvas);
                     break;
                 case RUNNING:
                     drawGame(canvas);
@@ -132,5 +110,35 @@ public class Game {
         highway.draw(canvas);
         testCar.draw(canvas, 0);
         player.draw(canvas, 0);
+    }
+
+    private void restartGame() {
+        player = new Player(null, context, new Rect(
+                400,
+                screen.height()/2,
+                520,
+                screen.height()/2 + 220),
+                screen);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+
+        highway = new ScrollableBackground( BitmapFactory.decodeResource(resources, R.drawable.highway, options),
+                context, new Rect( 0, screen.height() - screen.width() / 10, screen.width(), screen.height()), screen, 12);
+
+        skyline_close = new ScrollableBackground(BitmapFactory.decodeResource(context.getResources(), R.drawable.skyline_close, options),
+                context, new Rect( 0, screen.height() / 2, screen.height() * 3, screen.height()), screen, 8);
+
+        skyline_mid = new ScrollableBackground(BitmapFactory.decodeResource(context.getResources(), R.drawable.skyline_mid, options),
+                context, new Rect( 0, screen.height() / 4, screen.height() * 3, screen.height()), screen, 4);
+
+        skyline_far = new ScrollableBackground(BitmapFactory.decodeResource(context.getResources(), R.drawable.skyline_far, options),
+                context, new Rect( 0, screen.height() / 4, screen.height() * 3, screen.height()), screen, 2);
+
+        testCar = new Vehicle(null, context, Vehicle.generate(screen), screen, screen.height() - screen.width() / 10);
+
+        borderPaint.setStrokeWidth(24);
+        borderPaint.setColor(Color.GREEN);
+        borderPaint.setStyle(Paint.Style.STROKE);
+        state = GameState.RUNNING;
     }
 }
