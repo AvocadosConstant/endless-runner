@@ -34,6 +34,7 @@ public class Game {
     private ScrollableBackground skyline_close;
     private ScrollableBackground skyline_mid;
     private ScrollableBackground skyline_far;
+    private Vehicle testCar;
 
     Paint borderPaint = new Paint();
 
@@ -63,6 +64,8 @@ public class Game {
         skyline_far = new ScrollableBackground(BitmapFactory.decodeResource(context.getResources(), R.drawable.skyline_far, options),
                 context, new Rect( 0, screen.height() / 4, screen.height() * 3, screen.height()), screen, 2);
 
+        testCar = new Vehicle(null, context, Vehicle.generate(screen), screen, screen.height() - screen.width() / 10);
+
         borderPaint.setStrokeWidth(24);
         borderPaint.setColor(Color.GREEN);
         borderPaint.setStyle(Paint.Style.STROKE);
@@ -89,6 +92,9 @@ public class Game {
             skyline_close.update(elapsed);
             skyline_mid.update(elapsed);
             skyline_far.update(elapsed);
+            testCar.update(elapsed);
+
+            if(testCar.isOffScreen()) testCar = new Vehicle(null, context, Vehicle.generate(screen), screen, screen.height() - screen.width() / 10);
         }
     }
 
@@ -124,6 +130,7 @@ public class Game {
         skyline_mid.draw(canvas);
         skyline_close.draw(canvas);
         highway.draw(canvas);
+        testCar.draw(canvas, 0);
         player.draw(canvas, 0);
     }
 }
