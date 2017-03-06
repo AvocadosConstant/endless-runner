@@ -2,11 +2,14 @@ package codes.timhung.endlessrunner;
 
 import android.content.Context;
         import android.content.res.Resources;
-        import android.graphics.Canvas;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
         import android.graphics.Color;
         import android.graphics.Paint;
         import android.graphics.Rect;
-        import android.util.Log;
+import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
         import android.view.MotionEvent;
         import android.view.SurfaceHolder;
 
@@ -27,17 +30,27 @@ public class Game {
     private GameState state = GameState.PAUSED;
 
     private Player player;
+    private Sprite highway;
 
     public Game(Context context, Rect screen, SurfaceHolder holder, Resources resources) {
         this.context = context;
         this.screen = screen;
         this.holder = holder;
         this.resources = resources;
-        player = new Player( null, new Rect(
-                screen.width()/2,
+        player = new Player(null, new Rect(
+                400,
                 screen.height()/2,
-                screen.width()/2 + 120,
+                520,
                 screen.height()/2 + 220),
+                screen);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+        Bitmap source = BitmapFactory.decodeResource(context.getResources(), R.drawable.highway, options);
+        highway = new Sprite(source, new Rect(
+                0,
+                screen.height() - screen.width() / 10,
+                screen.width(),
+                screen.height()),
                 screen);
     }
 
@@ -92,7 +105,8 @@ public class Game {
         borderPaint.setStrokeWidth(24);
         borderPaint.setColor(Color.GREEN);
         borderPaint.setStyle(Paint.Style.STROKE);
-        canvas.drawRect(screen, borderPaint);
+        //canvas.drawRect(screen, borderPaint);
         player.draw(canvas, 0);
+        highway.draw(canvas, 0);
     }
 }

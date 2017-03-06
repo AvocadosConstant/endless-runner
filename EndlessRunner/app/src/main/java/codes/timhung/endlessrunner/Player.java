@@ -13,8 +13,8 @@ public class Player extends Sprite {
 
     public void update(long elapsed) {
         // Check for player hitting bottom
-        if(this.getHitbox().bottom >= screen.bottom) {
-            this.setY(screen.bottom - this.getHeight());
+        if(this.getHitbox().bottom >= screen.height() - screen.width() / 10) {
+            this.setY(screen.height() - screen.width() / 10 - this.getHeight());
             // Don't let player fall through
             this.vy = 0;
             // Apply friction in the x axis
@@ -25,7 +25,7 @@ public class Player extends Sprite {
         //Log.d("PLAYER", "vy: " + vy + " | ay: " + ay);
         //Log.d("PLAYER", "height: " + this.getHeight() + " | width: " + this.getWidth());
         //Log.d("PLAYER", "HBheight: " + this.getHitbox().height() + " | HBwidth: " + this.getHitbox().width());
-        //Log.d("PLAYER", "Screen height: " + screen.height() + " | Screen width: " + screen.width());
+        Log.d("PLAYER", "Screen height: " + screen.height() + " | Screen width: " + screen.width());
 
         super.update(elapsed);
 
@@ -34,7 +34,7 @@ public class Player extends Sprite {
 
     public void jump() {
         Log.d("PLAYER", "Jump");
-        if(Math.abs(this.getBottom() - screen.bottom) < 5) this.applyForce(0, -50);
+        if(Math.abs(this.getBottom() - screen.height() + screen.width() / 10) < 5) this.applyForce(0, -50);
     }
 
     public void applyForce(double fax, double fay) {

@@ -70,8 +70,15 @@ public class Sprite {
         //Log.d("SPRITE", "Drawing sprite at (" + hitbox.left + ", " + hitbox.top + ")");
         if(image != null) {
             // Draw image
+            Paint noAliasPaint = new Paint();
+            noAliasPaint.setAntiAlias(false);
+            noAliasPaint.setFilterBitmap(false);
+            noAliasPaint.setDither(false);
+            noAliasPaint.setColor(Color.GREEN);
+            canvas.drawBitmap(image, null, getHitbox(), noAliasPaint);
+        } else {
+            drawHitbox(canvas, elevation, Color.MAGENTA);
         }
-        drawHitbox(canvas, elevation, Color.MAGENTA);
         drawVecs(canvas, elevation, 15);
     }
 
