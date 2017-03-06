@@ -1,5 +1,6 @@
 package codes.timhung.endlessrunner;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -20,6 +21,7 @@ public class Sprite {
         IDLE, JUMP, FLY, LAND
     }
     public Bitmap image;
+    public Context context;
     private Rect hitbox;
     public Rect screen;
     private SpriteState spriteState;
@@ -38,8 +40,13 @@ public class Sprite {
     public final double GRAV = 2;
     public boolean affectedByGrav = false;
 
-    public Sprite(Bitmap image, Rect hitbox, Rect screen) {
+    Paint noAliasPaint = new Paint();
+    Paint borderPaint = new Paint();
+    Paint vectorPaint = new Paint();
+
+    public Sprite(Bitmap image, Context context, Rect hitbox, Rect screen) {
         this.image = image;
+        this.context = context;
         this.hitbox = hitbox;
         this.screen = screen;
         spriteState = SpriteState.IDLE;
@@ -53,6 +60,18 @@ public class Sprite {
         this.vy = 0;
         this.ax = 0;
         this.ay = 0;
+
+        noAliasPaint.setAntiAlias(false);
+        noAliasPaint.setFilterBitmap(false);
+        noAliasPaint.setDither(false);
+        noAliasPaint.setColor(Color.GREEN);
+
+        borderPaint.setStrokeWidth(10);
+        borderPaint.setStyle(Paint.Style.STROKE);
+
+        vectorPaint.setStyle(Paint.Style.STROKE);
+        vectorPaint.setStrokeWidth(8);
+        vectorPaint.setColor(Color.GREEN);
     }
 
     public void update(long elapsed) {
@@ -70,39 +89,28 @@ public class Sprite {
         //Log.d("SPRITE", "Drawing sprite at (" + hitbox.left + ", " + hitbox.top + ")");
         if(image != null) {
             // Draw image
-            Paint noAliasPaint = new Paint();
-            noAliasPaint.setAntiAlias(false);
-            noAliasPaint.setFilterBitmap(false);
-            noAliasPaint.setDither(false);
-            noAliasPaint.setColor(Color.GREEN);
+            this.setY(this.getY());
             canvas.drawBitmap(image, null, getHitbox(), noAliasPaint);
         } else {
             drawHitbox(canvas, elevation, Color.MAGENTA);
         }
-        drawVecs(canvas, elevation, 15);
+        //drawVecs(canvas, elevation, 15);
     }
 
     public void drawHitbox(Canvas canvas, long elevation, int color) {
-        Paint borderPaint = new Paint();
-        borderPaint.setStrokeWidth(10);
         borderPaint.setColor(color);
-        borderPaint.setStyle(Paint.Style.STROKE);
         this.setY(this.getY());// + elevation);
         canvas.drawRect(hitbox, borderPaint);
     }
 
     public void drawVecs(Canvas canvas, long elevation, int scalar) {
-        Paint paint = new Paint();
         // Draw velocities
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(8);
-        paint.setColor(Color.GREEN);
         Path path = new Path();
         path.moveTo(this.getHitbox().centerX(), this.getHitbox().centerY());
         path.lineTo(this.getHitbox().centerX() + (int) vx * scalar,
                 this.getHitbox().centerY() + (int) vy * scalar);
         path.close();
-        canvas.drawPath(path, paint);
+        canvas.drawPath(path, vectorPaint);
     }
 
     public Rect getHitbox() {

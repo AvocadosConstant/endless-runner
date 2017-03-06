@@ -30,14 +30,19 @@ public class Game {
     private GameState state = GameState.PAUSED;
 
     private Player player;
-    private Sprite highway;
+    private ScrollableBackground highway;
+    private ScrollableBackground skyline_close;
+    private ScrollableBackground skyline_mid;
+    private ScrollableBackground skyline_far;
+
+    Paint borderPaint = new Paint();
 
     public Game(Context context, Rect screen, SurfaceHolder holder, Resources resources) {
         this.context = context;
         this.screen = screen;
         this.holder = holder;
         this.resources = resources;
-        player = new Player(null, new Rect(
+        player = new Player(null, context, new Rect(
                 400,
                 screen.height()/2,
                 520,
@@ -45,13 +50,22 @@ public class Game {
                 screen);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
-        Bitmap source = BitmapFactory.decodeResource(context.getResources(), R.drawable.highway, options);
-        highway = new Sprite(source, new Rect(
-                0,
-                screen.height() - screen.width() / 10,
-                screen.width(),
-                screen.height()),
-                screen);
+
+        highway = new ScrollableBackground( BitmapFactory.decodeResource(context.getResources(), R.drawable.highway, options),
+                context, new Rect( 0, screen.height() - screen.width() / 10, screen.width(), screen.height()), screen, 16);
+
+        skyline_close = new ScrollableBackground(BitmapFactory.decodeResource(context.getResources(), R.drawable.skyline_close, options),
+                context, new Rect( 0, 0, screen.height() * 3, screen.height()), screen, 12);
+
+        skyline_mid = new ScrollableBackground(BitmapFactory.decodeResource(context.getResources(), R.drawable.skyline_mid, options),
+                context, new Rect( 0, 0, screen.height() * 3, screen.height()), screen, 8);
+
+        skyline_far = new ScrollableBackground(BitmapFactory.decodeResource(context.getResources(), R.drawable.skyline_far, options),
+                context, new Rect( 0, 0, screen.height() * 3, screen.height()), screen, 4);
+
+        borderPaint.setStrokeWidth(24);
+        borderPaint.setColor(Color.GREEN);
+        borderPaint.setStyle(Paint.Style.STROKE);
     }
 
     public void onTouchEvent(MotionEvent event) {
@@ -71,6 +85,10 @@ public class Game {
         if(state == GameState.RUNNING){
             // Do stuff
             player.update(elapsed);
+            highway.update(elapsed);
+            skyline_close.update(elapsed);
+            skyline_mid.update(elapsed);
+            skyline_far.update(elapsed);
         }
     }
 
@@ -101,12 +119,11 @@ public class Game {
      */
     private void drawGame(Canvas canvas) {
         //Log.d("GAME_DRAWGAME", "Trying to draw everything in the game!");
-        Paint borderPaint = new Paint();
-        borderPaint.setStrokeWidth(24);
-        borderPaint.setColor(Color.GREEN);
-        borderPaint.setStyle(Paint.Style.STROKE);
         //canvas.drawRect(screen, borderPaint);
+        skyline_far.draw(canvas);
+        skyline_mid.draw(canvas);
+        skyline_close.draw(canvas);
+        highway.draw(canvas);
         player.draw(canvas, 0);
-        highway.draw(canvas, 0);
     }
 }
