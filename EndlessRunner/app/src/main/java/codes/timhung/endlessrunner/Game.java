@@ -52,16 +52,16 @@ public class Game {
         options.inScaled = false;
 
         highway = new ScrollableBackground( BitmapFactory.decodeResource(context.getResources(), R.drawable.highway, options),
-                context, new Rect( 0, screen.height() - screen.width() / 10, screen.width(), screen.height()), screen, 16);
+                context, new Rect( 0, screen.height() - screen.width() / 10, screen.width(), screen.height()), screen, 12);
 
         skyline_close = new ScrollableBackground(BitmapFactory.decodeResource(context.getResources(), R.drawable.skyline_close, options),
-                context, new Rect( 0, 0, screen.height() * 3, screen.height()), screen, 12);
+                context, new Rect( 0, screen.height() / 2, screen.height() * 3, screen.height()), screen, 8);
 
         skyline_mid = new ScrollableBackground(BitmapFactory.decodeResource(context.getResources(), R.drawable.skyline_mid, options),
-                context, new Rect( 0, 0, screen.height() * 3, screen.height()), screen, 8);
+                context, new Rect( 0, screen.height() / 4, screen.height() * 3, screen.height()), screen, 4);
 
         skyline_far = new ScrollableBackground(BitmapFactory.decodeResource(context.getResources(), R.drawable.skyline_far, options),
-                context, new Rect( 0, 0, screen.height() * 3, screen.height()), screen, 4);
+                context, new Rect( 0, screen.height() / 4, screen.height() * 3, screen.height()), screen, 2);
 
         borderPaint.setStrokeWidth(24);
         borderPaint.setColor(Color.GREEN);

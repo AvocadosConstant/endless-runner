@@ -37,7 +37,7 @@ public class Sprite {
     public double ay;
 
     public final double FRIC = 3;
-    public final double GRAV = 2;
+    public final double GRAV = 4;
     public boolean affectedByGrav = false;
 
     Paint noAliasPaint = new Paint();
@@ -90,7 +90,7 @@ public class Sprite {
         if(image != null) {
             // Draw image
             this.setY(this.getY());
-            canvas.drawBitmap(image, null, getHitbox(), noAliasPaint);
+            canvas.drawBitmap(image, null, getHitbox(), null);
         } else {
             drawHitbox(canvas, elevation, Color.MAGENTA);
         }

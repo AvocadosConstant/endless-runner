@@ -34,7 +34,7 @@ public class Player extends Sprite {
 
     public void jump() {
         //Log.d("PLAYER", "Jump");
-        if(Math.abs(this.getBottom() - screen.height() + screen.width() / 10) < 5) this.applyForce(0, -50);
+        if(Math.abs(this.getBottom() - screen.height() + screen.width() / 10) < 5) this.applyForce(0, -60);
     }
 
     public void applyForce(double fax, double fay) {
