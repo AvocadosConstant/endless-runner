@@ -15,11 +15,10 @@ public class Vehicle extends Sprite {
         this.vx = -30;
         this.setX(screen.right);
         this.setY(roadHeight - this.getHeight());
-        //return new Rect(screen.right, roadHeight - 60, screen.right + 120, roadHeight);
     }
 
     public static Rect generate(Rect screen) {
-        return new Rect(0, 0, 240, 140);
+        return new Rect(0, 0, 300, 140);
     }
 
     public boolean isOffScreen() {

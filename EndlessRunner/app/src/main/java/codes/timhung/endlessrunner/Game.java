@@ -1,17 +1,17 @@
 package codes.timhung.endlessrunner;
 
 import android.content.Context;
-        import android.content.res.Resources;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-        import android.graphics.Color;
-        import android.graphics.Paint;
-        import android.graphics.Rect;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
-        import android.view.MotionEvent;
-        import android.view.SurfaceHolder;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 
 public class Game {
 
@@ -34,12 +34,15 @@ public class Game {
     private Sprite loseText;
 
     Paint borderPaint = new Paint();
+    BitmapFactory.Options options;
 
     public Game(Context context, Rect screen, SurfaceHolder holder, Resources resources) {
         this.context = context;
         this.screen = screen;
         this.holder = holder;
         this.resources = resources;
+        options = new BitmapFactory.Options();
+        options.inScaled = false;
         restartGame();
     }
 
@@ -70,7 +73,8 @@ public class Game {
             skyline_far.update(elapsed);
             testCar.update(elapsed);
 
-            if(testCar.isOffScreen()) testCar = new Vehicle(null, context, Vehicle.generate(screen), screen, screen.height() - screen.width() / 10);
+            if(testCar.isOffScreen()) testCar = new Vehicle(BitmapFactory.decodeResource(resources, R.drawable.van, options),
+                    context, Vehicle.generate(screen), screen, screen.height() - screen.width() / 10);
 
             if(Rect.intersects(testCar.getHitbox(), player.getHitbox())) loseGame();
         }
@@ -124,22 +128,21 @@ public class Game {
                 520,
                 screen.height()/2 + 220),
                 screen);
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
 
         highway = new ScrollableBackground( BitmapFactory.decodeResource(resources, R.drawable.highway, options),
                 context, new Rect( 0, screen.height() - screen.width() / 10, screen.width(), screen.height()), screen, 12);
 
-        skyline_close = new ScrollableBackground(BitmapFactory.decodeResource(context.getResources(), R.drawable.skyline_close, options),
+        skyline_close = new ScrollableBackground(BitmapFactory.decodeResource(resources, R.drawable.skyline_close, options),
                 context, new Rect( 0, screen.height() / 2, screen.height() * 3, screen.height()), screen, 8);
 
-        skyline_mid = new ScrollableBackground(BitmapFactory.decodeResource(context.getResources(), R.drawable.skyline_mid, options),
+        skyline_mid = new ScrollableBackground(BitmapFactory.decodeResource(resources, R.drawable.skyline_mid, options),
                 context, new Rect( 0, screen.height() / 4, screen.height() * 3, screen.height()), screen, 4);
 
-        skyline_far = new ScrollableBackground(BitmapFactory.decodeResource(context.getResources(), R.drawable.skyline_far, options),
+        skyline_far = new ScrollableBackground(BitmapFactory.decodeResource(resources, R.drawable.skyline_far, options),
                 context, new Rect( 0, screen.height() / 4, screen.height() * 3, screen.height()), screen, 2);
 
-        testCar = new Vehicle(null, context, Vehicle.generate(screen), screen, screen.height() - screen.width() / 10);
+        testCar = new Vehicle(BitmapFactory.decodeResource(resources, R.drawable.van, options),
+                context, Vehicle.generate(screen), screen, screen.height() - screen.width() / 10);
 
         loseText = new Sprite(BitmapFactory.decodeResource(resources, R.drawable.lose_text, options),
                 context, new Rect(screen.width() / 2 - 600, screen.height() / 2 - 180, screen.width() / 2 + 600, screen.height() / 2 + 180), screen);
