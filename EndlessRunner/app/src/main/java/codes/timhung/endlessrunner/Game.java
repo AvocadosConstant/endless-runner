@@ -13,21 +13,17 @@ import android.util.Log;
         import android.view.MotionEvent;
         import android.view.SurfaceHolder;
 
-/**
- * Created by Tim Hung on 3/7/2017.
- */
-
 public class Game {
 
     private enum GameState {
-        PAUSED, RUNNING
+        START, PAUSED, RUNNING, LOST
     }
 
     private Context context;
     private SurfaceHolder holder;
     private Rect screen;
     private Resources resources;
-    private GameState state = GameState.PAUSED;
+    private GameState state = GameState.START;
 
     private Player player;
     private ScrollableBackground highway;
@@ -35,6 +31,7 @@ public class Game {
     private ScrollableBackground skyline_mid;
     private ScrollableBackground skyline_far;
     private Vehicle testCar;
+    private Sprite loseText;
 
     Paint borderPaint = new Paint();
 
@@ -49,8 +46,12 @@ public class Game {
     public void onTouchEvent(MotionEvent event) {
         if (state == GameState.RUNNING) {
             player.jump();
-        } if(state == GameState.PAUSED){
+        } else if(state == GameState.LOST){
             restartGame();
+        } else if(state == GameState.START) {
+            state = GameState.RUNNING;
+        } else if(state == GameState.PAUSED) {
+            state = GameState.RUNNING;
         }
     }
 
@@ -71,7 +72,7 @@ public class Game {
 
             if(testCar.isOffScreen()) testCar = new Vehicle(null, context, Vehicle.generate(screen), screen, screen.height() - screen.width() / 10);
 
-            if(Rect.intersects(testCar.getHitbox(), player.getHitbox())) state = GameState.PAUSED;
+            if(Rect.intersects(testCar.getHitbox(), player.getHitbox())) loseGame();
         }
     }
 
@@ -85,10 +86,14 @@ public class Game {
         if (canvas != null) {
             canvas.drawColor(Color.WHITE);
             switch (state) {
-                case PAUSED:
+                case RUNNING:
                     drawGame(canvas);
                     break;
-                case RUNNING:
+                case LOST:
+                    drawGame(canvas);
+                    loseText.draw(canvas, 0);
+                    break;
+                case START:
                     drawGame(canvas);
                     break;
             }
@@ -136,9 +141,16 @@ public class Game {
 
         testCar = new Vehicle(null, context, Vehicle.generate(screen), screen, screen.height() - screen.width() / 10);
 
+        loseText = new Sprite(BitmapFactory.decodeResource(resources, R.drawable.lose_text, options),
+                context, new Rect(screen.width() / 2 - 600, screen.height() / 2 - 180, screen.width() / 2 + 600, screen.height() / 2 + 180), screen);
+
         borderPaint.setStrokeWidth(24);
         borderPaint.setColor(Color.GREEN);
         borderPaint.setStyle(Paint.Style.STROKE);
         state = GameState.RUNNING;
+    }
+
+    private void loseGame() {
+        state = GameState.LOST;
     }
 }

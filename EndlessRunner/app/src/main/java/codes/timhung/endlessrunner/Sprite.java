@@ -9,11 +9,6 @@ import android.graphics.Path;
 import android.graphics.Rect;
 
 /**
- * Created by Tim Hung on 3/7/2017.
- */
-
-
-/**
  * Parent class of any sprite
  */
 public class Sprite {

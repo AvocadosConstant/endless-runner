@@ -1,15 +1,12 @@
 package codes.timhung.endlessrunner;
-        import android.content.Context;
-        import android.graphics.Rect;
-        import android.util.AttributeSet;
-        import android.util.Log;
-        import android.view.MotionEvent;
-        import android.view.SurfaceHolder;
-        import android.view.SurfaceView;
+import android.content.Context;
+import android.graphics.Rect;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
-/**
- * Created by Tim Hung on 3/7/2017.
- */
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     SurfaceHolder holder;
